@@ -221,33 +221,37 @@ if (isset($_POST['submit_feedback'])) {
             <div class="info-section">
                 <h2><i class="fa-solid fa-user-graduate"></i> Created By</h2>
                 <p>Promise Vora (Indus University)</p>
+                <p>_IU2341050117_</p>
             </div>
             
             <div class="info-section">
                 <h2><i class="fa-solid fa-code"></i> Technology Stack</h2>
-                <p>HTML, CSS, JavaScript, PHP</p>
+                <p>HTML, CSS, <br> JavaScript, PHP</p>
             </div>
 
-            <!-- ====== UPDATED CONTACT US SECTION ====== -->
+            
             <div class="info-section" id="contact-info">
                 <h2><i class="fa-solid fa-comments"></i> Contact Us</h2>
                 <p>
-                    Got a question or suggestion? We'd love to hear from you. Reach out to us.
+                    Got a question or suggestion? <br> We'd love to hear from you.<br> Reach out to us..<br><b>Email</b> 
                 </p>
+
                 <div class="contact-details">
                     <div class="contact-link">
                         <i class="fa-solid fa-envelope-open-text"></i>
-                        <a href="mailto:stockbuddy@example.com">stockbuddy@example.com</a>
-                    </div>
+                        <a href="mailto:stockbuddy@example.com">stockbuddy@gmail.com</a>
+                    </div> 
+                <p>
+                    <b>CO. NO.:</b>
+                    <br>  
+                </p>
                      <div class="contact-link">
                         <i class="fa-solid fa-phone-volume"></i>
                         <a href="tel:+919876543210">+91 9876543210</a>
                     </div>
                 </div>
             </div>
-            <!-- ======================================= -->
             
-            <!-- ====== NEW FEEDBACK SECTION ====== -->
             <div class="info-section">
                 <h2><i class="fa-solid fa-paper-plane"></i> Send Feedback</h2>
                 <form class="feedback-form" method="post">
@@ -257,8 +261,7 @@ if (isset($_POST['submit_feedback'])) {
                     <button type="submit" name="submit_feedback">Submit</button>
                 </form>
             </div>
-            <!-- ================================== -->
-
+            
         </div>
     </div>
 
