@@ -12,7 +12,7 @@ if (!isset($_SESSION['user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockBuddy - Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -29,7 +29,7 @@ if (!isset($_SESSION['user'])) {
             font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
             color: var(--text-color);
-            background-image: linear-gradient(rgba(232, 245, 233, 0.7), rgba(232, 245, 233, 0.7)), url('images/home.jpg');
+            background-image: linear-gradient(rgba(232, 245, 233, 0.7), rgba(232, 245, 233, 0.7)), url('images/home.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -43,6 +43,7 @@ if (!isset($_SESSION['user'])) {
             justify-content: center;
             flex-wrap: wrap;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            align-items: center; 
         }
         nav a {
             color: white;
@@ -52,6 +53,7 @@ if (!isset($_SESSION['user'])) {
             padding: 5px 10px;
             border-radius: 4px;
             transition: background 0.3s;
+            font-size: 1rem; 
         }
         nav a:hover {
             background: var(--secondary-color);
@@ -76,8 +78,8 @@ if (!isset($_SESSION['user'])) {
             padding: 0 2rem;
             font-size: 0.9rem;
         }
-        .stock-up { color: #4caf50; /* Green color for price up */ }
-        .stock-down { color: #f44336; /* Red color for price down */ }
+        .stock-up { color: #4caf50; }
+        .stock-down { color: #f44336; }
         
         @keyframes ticker-scroll {
             0% { transform: translateX(100%); }
@@ -134,16 +136,22 @@ if (!isset($_SESSION['user'])) {
             box-shadow: 0 8px 30px rgba(0,0,0,0.08);
             text-align: center;
             width: 250px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, color 0.3s;
         }
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            transform: translateY(-5px) scale(0.95); /* <<< AA LINE BADLI CHHE */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            background-color: var(--primary-color);
+            color: white;
         }
         .feature-card i {
             font-size: 2.5rem;
             color: var(--primary-color);
             margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        .feature-card:hover i {
+            color: white;
         }
         .feature-card h3 {
             font-size: 1.3rem;
@@ -173,6 +181,20 @@ if (!isset($_SESSION['user'])) {
             font-weight: bold;
         }
 
+        /* 4. Local Video Section CSS */
+        .video-container {
+            margin: 50px auto 0 auto;
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            overflow: hidden; 
+        }
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block; 
+        }
+
         @media(max-width: 768px) {
             .hero-container h1 { font-size: 2.2rem; }
             .hero-container p { font-size: 1rem; }
@@ -185,7 +207,7 @@ if (!isset($_SESSION['user'])) {
         <a href="home.php">Home</a>
         <a href="sharelist.php">Share List</a>
         <a href="about.php">About Us</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
     </nav>
 
     <div class="ticker-wrap">
@@ -198,6 +220,13 @@ if (!isset($_SESSION['user'])) {
         <h1>Welcome to <span>StockBuddy</span></h1>
         <p>Your simple and powerful tool for tracking live stock prices and trends with ease.</p>
         <a href="sharelist.php" class="cta-button">View Live Share List</a>
+        
+        <div class="video-container" data-aos="fade-up">
+            <video autoplay loop muted>
+                <source src="videos/video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
 
     <div class="features-container">
@@ -227,8 +256,8 @@ if (!isset($_SESSION['user'])) {
     <script>
         // AOS Initialize
         AOS.init({
-            duration: 800, // Animation длительность
-            once: true, // Animation только один раз
+            duration: 800,
+            once: true,
         });
     </script>
     
@@ -252,39 +281,6 @@ if (!isset($_SESSION['user'])) {
         
         // Ticker ને બે વાર દેખાડવા માટે જેથી સ્ક્રોલિંગ સ્મૂધ લાગે
         tickerContent.innerHTML = html + html;
-
-        // **લાઇવ API માટે (નોંધ):**
-        // નીચેનો કોડ વાપરવા માટે, તમારે Alpha Vantage જેવી વેબસાઇટ પરથી ફ્રી API કી લેવી પડશે.
-        // પછી 'YOUR_API_KEY' ની જગ્યાએ તમારી કી નાખવી પડશે.
-        // અત્યારે આ કોડ બંધ છે અને ઉપરનો ડમી ડેટા દેખાશે.
-        /*
-        const apiKey = 'YOUR_API_KEY';
-        const symbols = ['AAPL', 'GOOGL', 'MSFT', 'TSLA', 'AMZN'];
-        
-        async function fetchStockData() {
-            let liveHtml = '';
-            for (const symbol of symbols) {
-                const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`);
-                const data = await response.json();
-                const quote = data['Global Quote'];
-                
-                if (quote && quote['05. price']) {
-                    const price = parseFloat(quote['05. price']).toFixed(2);
-                    const change = parseFloat(quote['10. change']).toFixed(2);
-                    const changeClass = change >= 0 ? 'stock-up' : 'stock-down';
-                    const changeSign = change >= 0 ? '+' : '';
-
-                    liveHtml += `<div class="ticker-item">${symbol}: $${price} <span class="${changeClass}">${changeSign}${change}</span></div>`;
-                }
-            }
-            if (liveHtml) {
-                 tickerContent.innerHTML = liveHtml + liveHtml;
-            }
-        }
-        
-        // પેજ લોડ થવા પર API કોલ કરો
-        // fetchStockData();
-        */
     </script>
 
 </body>
