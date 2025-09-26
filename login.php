@@ -3,7 +3,12 @@ session_start();
 $error = '';
 
 if (isset($_SESSION['user'])) {
-    header("Location: home.php");
+    // If already logged in, redirect based on username
+    if ($_SESSION['user'] === 'admin') {
+        header("Location: admin.php");
+    } else {
+        header("Location: home.php");
+    }
     exit();
 }
 
@@ -11,11 +16,9 @@ if (isset($_POST['login'])) {
     
     include 'db_connect.php';
 
-
     $username = $_POST['username'];
     $password = $_POST['password'];
  
-
     $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -24,10 +27,21 @@ if (isset($_POST['login'])) {
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
         
+        // Verify password
         if (password_verify($password, $user['password'])) {
+            // Set the session
             $_SESSION['user'] = $user['username'];
-            header("Location: home.php");
-            exit();
+
+            // Check if the logged-in user is 'admin'
+            if ($user['username'] === 'admin') {
+                // Redirect to admin panel
+                header("Location: admin.php");
+            } else {
+                // Redirect to normal user homepage
+                header("Location: home.php");
+            }
+            exit(); // Always exit after a header redirect
+
         } else {
             $error = "Wrong username or password.";
         }
@@ -46,7 +60,7 @@ if (isset($_POST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockBuddy - Secure Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -60,11 +74,7 @@ if (isset($_POST['login'])) {
             --down-color: #f44336;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -126,75 +136,70 @@ if (isset($_POST['login'])) {
             z-index: 0;
         }
 
+        /* --- CSS SUDHARI CHHE --- */
         .stock-element {
             position: absolute;
             opacity: 0;
-            animation: stock-flow 15s linear infinite;
+            animation: stock-flow 5s linear infinite;
         }
 
-        .stock-element.up-arrow {
-            font-size: 3rem;
-            color: var(--up-color);
-            transform: translateY(0) rotate(45deg);
-        }
-
-        .stock-element.down-arrow {
-            font-size: 3rem;
-            color: var(--down-color);
-            transform: translateY(0) rotate(-45deg);
-        }
-
+        .stock-element.up-arrow { font-size: 3rem; color: var(--up-color); }
+        .stock-element.down-arrow { font-size: 3rem; color: var(--down-color); }
+        
         .stock-element.candle {
             width: 10px;
             height: 50px;
             background-color: var(--up-color);
             border-radius: 2px;
+            position: relative; /* Wicks mate aa jaruri chhe */
         }
         .stock-element.candle.red {
             background-color: var(--down-color);
         }
+        
+        /* Candle ni upar-niche ni lines (wicks) mate no code */
         .stock-element.candle::before, .stock-element.candle::after {
             content: '';
             position: absolute;
             width: 2px;
             background-color: inherit;
+            left: 4px;
         }
         .stock-element.candle::before {
             height: 15px;
             top: -15px;
-            left: 4px;
         }
         .stock-element.candle::after {
             height: 15px;
             bottom: -15px;
-            left: 4px;
         }
-
-
+        
         @keyframes stock-flow {
             0% {
-                transform: translateY(100vh) translateX(0) scale(0.5) rotate(0deg);
+                transform: translateY(100vh) translateX(0) rotate(0deg);
                 opacity: 0;
             }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
+            25% {
+                transform: translateY(75vh) translateX(20px) rotate(15deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) translateX(-20px) rotate(-15deg);
+            }
+            75% {
+                transform: translateY(25vh) translateX(10px) rotate(10deg);
+            }
             100% {
-                transform: translateY(-100px) translateX(var(--end-x)) scale(1.2) rotate(var(--end-rotate));
+                transform: translateY(-100px) translateX(0) rotate(0deg);
                 opacity: 0;
             }
         }
 
-        .stock-element:nth-child(1) { left: 10%; --end-x: 20px; --end-rotate: 10deg; animation-delay: 0s; }
-        .stock-element:nth-child(2) { left: 25%; --end-x: -30px; --end-rotate: -15deg; animation-delay: 3s; }
-        .stock-element:nth-child(3) { left: 40%; --end-x: 10px; --end-rotate: 5deg; animation-delay: 6s; }
-        .stock-element:nth-child(4) { left: 55%; --end-x: -20px; --end-rotate: -10deg; animation-delay: 9s; }
-        .stock-element:nth-child(5) { left: 70%; --end-x: 5px; --end-rotate: 8deg; animation-delay: 12s; }
-        .stock-element:nth-child(6) { left: 85%; --end-x: -15px; --end-rotate: -5deg; animation-delay: 1s; }
-        .stock-element:nth-child(7) { left: 5%; --end-x: 25px; --end-rotate: 20deg; animation-delay: 4s; }
-        .stock-element:nth-child(8) { left: 20%; --end-x: -10px; --end-rotate: -8deg; animation-delay: 7s; }
-        .stock-element:nth-child(9) { left: 35%; --end-x: 15px; --end-rotate: 12deg; animation-delay: 10s; }
-        .stock-element:nth-child(10) { left: 60%; --end-x: -5px; --end-rotate: -2deg; animation-delay: 2s; }
-
+        .stock-element:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .stock-element:nth-child(2) { left: 25%; animation-delay: 1s; }
+        .stock-element:nth-child(3) { left: 40%; animation-delay: 2s; }
+        .stock-element:nth-child(4) { left: 55%; animation-delay: 3s; }
+        .stock-element:nth-child(5) { left: 70%; animation-delay: 4s; }
 
         .form-side {
             width: 50%;
@@ -227,7 +232,6 @@ if (isset($_POST['login'])) {
             outline: none;
             background: transparent;
             color: var(--text-dark);
-            transition: border-color 0.3s;
         }
 
         .input-label {
@@ -240,14 +244,10 @@ if (isset($_POST['login'])) {
             transition: all 0.3s ease;
         }
 
-        .input-field:focus {
-            border-bottom-color: var(--primary-color);
-        }
-        
+        .input-field:focus { border-bottom-color: var(--primary-color); }
         .input-field:focus + .input-label,
         .input-field:valid + .input-label {
             top: -15px;
-            left: 0;
             font-size: 0.8rem;
             color: var(--primary-color);
         }
@@ -266,7 +266,6 @@ if (isset($_POST['login'])) {
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(0, 121, 107, 0.3);
         }
-
         .login-btn:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0, 77, 64, 0.4);
@@ -279,25 +278,21 @@ if (isset($_POST['login'])) {
             height: 20px;
             text-align: center;
         }
+
+        .extra-link {
+            margin-top: 25px;
+            font-size: 0.9rem;
+        }
+        .extra-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
         
         @media(max-width: 900px) {
-            .login-container {
-                flex-direction: column;
-                width: 95%;
-                height: auto;
-                max-width: 480px;
-            }
-            .vibe-side {
-                width: 100%;
-                height: 250px;
-                justify-content: center;
-                text-align: center;
-                padding: 30px;
-            }
-            .form-side {
-                width: 100%;
-                padding: 40px;
-            }
+            .login-container { flex-direction: column; width: 95%; height: auto; max-width: 480px; }
+            .vibe-side { width: 100%; height: 250px; justify-content: center; text-align: center; padding: 30px; }
+            .form-side { width: 100%; padding: 40px; }
             .vibe-side h1 { font-size: 2.5rem; }
             .vibe-side p { font-size: 1rem; max-width: 100%; }
         }
@@ -311,13 +306,8 @@ if (isset($_POST['login'])) {
                 <div class="stock-element up-arrow">&#8593;</div>
                 <div class="stock-element down-arrow">&#8595;</div>
                 <div class="stock-element candle"></div>
-                <div class="stock-element up-arrow">&#8593;</div>
                 <div class="stock-element candle red"></div>
-                <div class="stock-element down-arrow">&#8595;</div>
-                <div class="stock-element candle"></div>
                 <div class="stock-element up-arrow">&#8593;</div>
-                <div class="stock-element down-arrow">&#8595;</div>
-                <div class="stock-element candle red"></div>
             </div>
             <h1>StockBuddy</h1>
             <p>Track the Market. Seize the Opportunity.</p>
@@ -337,6 +327,8 @@ if (isset($_POST['login'])) {
                 <button type="submit" name="login" class="login-btn">Login</button>
             </form>
             <p class="error-msg"><?php echo $error; ?></p>
+            
+            <p class="extra-link">Don't have an account? <a href="register.php"><u>Register here</u></a></p>
         </div>
 
     </div>

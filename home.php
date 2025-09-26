@@ -12,7 +12,7 @@ if (!isset($_SESSION['user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockBuddy - Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -67,10 +67,13 @@ if (!isset($_SESSION['user'])) {
             color: white;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
+        
+        /* <<< AA CSS MA BADLAV KARYO CHHE >>> */
         .ticker-move {
             display: inline-block;
             white-space: nowrap;
-            animation: ticker-scroll 50s linear infinite; 
+            /* Animation ni speed vadhari chhe */
+            animation: ticker-scroll 25s linear infinite; 
         }
         .ticker-item {
             display: inline-block;
@@ -80,9 +83,10 @@ if (!isset($_SESSION['user'])) {
         .stock-up { color: #4caf50; }
         .stock-down { color: #f44336; }
         
+        /* Animation have sidhu screen par thi j start thase */
         @keyframes ticker-scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         .hero-container {
@@ -180,7 +184,7 @@ if (!isset($_SESSION['user'])) {
         }
 
         .video-container {
-            margin: 50px auto 0 auto;
+            margin: 35px auto 0 auto;
             max-width: 800px;
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.12);
@@ -281,6 +285,7 @@ if (!isset($_SESSION['user'])) {
             html += `<div class="ticker-item">${stock.symbol}: $${stock.price} <span class="${changeClass}">${stock.change}</span></div>`;
         });
         
+        // Data ne be var mukiye chhiye jethi animation smoothly chale
         tickerContent.innerHTML = html + html;
     </script>
 
