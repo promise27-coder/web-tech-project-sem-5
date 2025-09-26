@@ -59,7 +59,6 @@ if (!isset($_SESSION['user'])) {
             background: var(--secondary-color);
         }
 
-        /* 2. Live Stock Ticker CSS */
         .ticker-wrap {
             width: 100%;
             overflow: hidden;
@@ -71,7 +70,7 @@ if (!isset($_SESSION['user'])) {
         .ticker-move {
             display: inline-block;
             white-space: nowrap;
-            animation: ticker-scroll 40s linear infinite;
+            animation: ticker-scroll 50s linear infinite; 
         }
         .ticker-item {
             display: inline-block;
@@ -139,7 +138,7 @@ if (!isset($_SESSION['user'])) {
             transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, color 0.3s;
         }
         .feature-card:hover {
-            transform: translateY(-5px) scale(0.95); /* <<< AA LINE BADLI CHHE */
+            transform: translateY(-5px) scale(0.95);
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
             background-color: var(--primary-color);
             color: white;
@@ -164,7 +163,6 @@ if (!isset($_SESSION['user'])) {
             font-size: 0.95rem;
         }
         
-        /* 3. Footer CSS */
         footer {
             background-color: var(--secondary-color);
             color: white;
@@ -181,7 +179,6 @@ if (!isset($_SESSION['user'])) {
             font-weight: bold;
         }
 
-        /* 4. Local Video Section CSS */
         .video-container {
             margin: 50px auto 0 auto;
             max-width: 800px;
@@ -254,22 +251,27 @@ if (!isset($_SESSION['user'])) {
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // AOS Initialize
         AOS.init({
-            duration: 800,
+            duration: 1,
             once: true,
         });
     </script>
     
     <script>
-        // Dummy Data (API કામ ન કરે તો આ દેખાડવા માટે)
         const dummyData = [
-            { symbol: 'AAPL', price: '175.20', change: '+1.45' },
-            { symbol: 'GOOGL', price: '140.80', change: '-0.25' },
-            { symbol: 'MSFT', price: '380.10', change: '+3.10' },
-            { symbol: 'TSLA', price: '250.60', change: '-2.70' },
-            { symbol: 'AMZN', price: '135.90', change: '+0.80' },
-        ];
+    { symbol: 'AAPL', price: '175.20', change: '+1.45' },
+    { symbol: 'GOOGL', price: '140.80', change: '-0.25' },
+    { symbol: 'MSFT', price: '380.10', change: '+3.10' },
+    { symbol: 'TSLA', price: '250.60', change: '-2.70' },
+    { symbol: 'AMZN', price: '135.90', change: '+0.80' },
+    { symbol: 'NVDA', price: '950.55', change: '+12.50' },
+    { symbol: 'META', price: '510.30', change: '-5.15' },
+    { symbol: 'NFLX', price: '620.00', change: '+8.20' },
+    { symbol: 'JPM', price: '200.10', change: '+1.90' },
+    { symbol: 'V', price: '280.75', change: '-0.45' },
+    { symbol: 'JNJ', price: '155.40', change: '+0.85' },
+    { symbol: 'WMT', price: '65.50', change: '-0.10' }
+];
 
         const tickerContent = document.getElementById('ticker-content');
         let html = '';
@@ -279,7 +281,6 @@ if (!isset($_SESSION['user'])) {
             html += `<div class="ticker-item">${stock.symbol}: $${stock.price} <span class="${changeClass}">${stock.change}</span></div>`;
         });
         
-        // Ticker ને બે વાર દેખાડવા માટે જેથી સ્ક્રોલિંગ સ્મૂધ લાગે
         tickerContent.innerHTML = html + html;
     </script>
 

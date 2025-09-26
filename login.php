@@ -8,16 +8,35 @@ if (isset($_SESSION['user'])) {
 }
 
 if (isset($_POST['login'])) {
+    
+    include 'db_connect.php';
+
+
     $username = $_POST['username'];
     $password = $_POST['password'];
+ 
 
-    if ($username == "admin" && $password == "1234") {
-        $_SESSION['user'] = $username;
-        header("Location: home.php");
-        exit();
+    $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+        
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['user'] = $user['username'];
+            header("Location: home.php");
+            exit();
+        } else {
+            $error = "Wrong username or password.";
+        }
     } else {
-        $error = "wrong username or password.";
+        $error = "Wrong username or password.";
     }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>
 <!DOCTYPE html>
@@ -27,18 +46,18 @@ if (isset($_POST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockBuddy - Secure Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #00796b; /* Main Green */
-            --secondary-color: #004d40; /* Dark Green */
-            --dark-bg: #1a1a1a; /* Dark background for the vibe */
+            --primary-color: #00796b;
+            --secondary-color: #004d40;
+            --dark-bg: #1a1a1a;
             --text-light: #f5f5f5;
             --text-dark: #333;
             --input-border-color: #ccc;
-            --up-color: #4caf50; /* Green for upward movement */
-            --down-color: #f44336; /* Red for downward movement */
+            --up-color: #4caf50;
+            --down-color: #f44336;
         }
 
         * {
@@ -54,7 +73,7 @@ if (isset($_POST['login'])) {
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* Important for animation */
+            overflow: hidden;
         }
 
         .login-container {
@@ -66,10 +85,9 @@ if (isset($_POST['login'])) {
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             display: flex;
             overflow: hidden;
-            position: relative; /* For z-index of animations */
+            position: relative;
         }
 
-        /* === Left Vibe Side === */
         .vibe-side {
             width: 50%;
             background-color: var(--dark-bg);
@@ -80,7 +98,7 @@ if (isset($_POST['login'])) {
             justify-content: flex-end;
             position: relative;
             overflow: hidden;
-            z-index: 1; /* Make sure text is above animation */
+            z-index: 1;
         }
 
         .vibe-side h1 {
@@ -97,7 +115,6 @@ if (isset($_POST['login'])) {
             max-width: 350px;
         }
 
-        /* === Animated Stock Graph Background === */
         .animated-background {
             position: absolute;
             top: 0;
@@ -105,8 +122,8 @@ if (isset($_POST['login'])) {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            pointer-events: none; /* Allows clicks/interaction to pass through */
-            z-index: 0; /* Keep it in the background */
+            pointer-events: none;
+            z-index: 0;
         }
 
         .stock-element {
@@ -115,25 +132,22 @@ if (isset($_POST['login'])) {
             animation: stock-flow 15s linear infinite;
         }
 
-        /* Up Arrow */
         .stock-element.up-arrow {
             font-size: 3rem;
             color: var(--up-color);
-            transform: translateY(0) rotate(45deg); /* Initial position */
+            transform: translateY(0) rotate(45deg);
         }
 
-        /* Down Arrow */
         .stock-element.down-arrow {
             font-size: 3rem;
             color: var(--down-color);
             transform: translateY(0) rotate(-45deg);
         }
 
-        /* Candle Stick */
         .stock-element.candle {
             width: 10px;
             height: 50px;
-            background-color: var(--up-color); /* Default candle color */
+            background-color: var(--up-color);
             border-radius: 2px;
         }
         .stock-element.candle.red {
@@ -145,12 +159,12 @@ if (isset($_POST['login'])) {
             width: 2px;
             background-color: inherit;
         }
-        .stock-element.candle::before { /* Top wick */
+        .stock-element.candle::before {
             height: 15px;
             top: -15px;
             left: 4px;
         }
-        .stock-element.candle::after { /* Bottom wick */
+        .stock-element.candle::after {
             height: 15px;
             bottom: -15px;
             left: 4px;
@@ -170,7 +184,6 @@ if (isset($_POST['login'])) {
             }
         }
 
-        /* Delay and properties for different elements to make them appear randomly */
         .stock-element:nth-child(1) { left: 10%; --end-x: 20px; --end-rotate: 10deg; animation-delay: 0s; }
         .stock-element:nth-child(2) { left: 25%; --end-x: -30px; --end-rotate: -15deg; animation-delay: 3s; }
         .stock-element:nth-child(3) { left: 40%; --end-x: 10px; --end-rotate: 5deg; animation-delay: 6s; }
@@ -183,7 +196,6 @@ if (isset($_POST['login'])) {
         .stock-element:nth-child(10) { left: 60%; --end-x: -5px; --end-rotate: -2deg; animation-delay: 2s; }
 
 
-        /* === Right Form Side === */
         .form-side {
             width: 50%;
             padding: 50px;
@@ -268,7 +280,6 @@ if (isset($_POST['login'])) {
             text-align: center;
         }
         
-        /* Responsive Design for mobile */
         @media(max-width: 900px) {
             .login-container {
                 flex-direction: column;

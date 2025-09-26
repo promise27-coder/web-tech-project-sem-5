@@ -6,11 +6,10 @@ if (!isset($_SESSION['user'])) {
 }
 
 $feedback_message = '';
-// Check if the feedback form was submitted
+
 if (isset($_POST['submit_feedback'])) {
-    // In a real application, you would save this to a database or send an email.
-    // For this project, we'll just prepare a success message.
-    $name = htmlspecialchars($_POST['name']); // Use htmlspecialchars for security
+  
+    $name = htmlspecialchars($_POST['name']); 
     $feedback_message = "Thank you for your feedback, " . $name . "!";
 }
 ?>
@@ -84,7 +83,7 @@ if (isset($_POST['submit_feedback'])) {
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             margin-top: 30px;
-            align-items: start; /* Align items to the top */
+            align-items: start; 
         }
         .info-section {
             padding: 25px;
@@ -124,7 +123,7 @@ if (isset($_POST['submit_feedback'])) {
              margin-top: 15px;
         }
 
-        /* --- New Contact Link Styles --- */
+      
         .contact-link {
             display: flex;
             align-items: center;
@@ -137,14 +136,14 @@ if (isset($_POST['submit_feedback'])) {
             color: var(--primary-color);
             margin-right: 12px;
             font-size: 1.2rem;
-            width: 20px; /* Ensures alignment */
+            width: 20px; 
             text-align: center;
         }
         .contact-link a {
             font-size: 1rem;
         }
 
-        /* --- Feedback Form Styles --- */
+      
         .feedback-form input,
         .feedback-form textarea {
             width: 100%;
@@ -188,8 +187,7 @@ if (isset($_POST['submit_feedback'])) {
             }
             .hero h1 { font-size: 2rem; }
             .info-grid {
-                grid-template-columns: 1fr; /* Stack columns on mobile */
-            }
+                grid-template-columns: 1fr;
         }
     </style>
 </head>
@@ -207,7 +205,7 @@ if (isset($_POST['submit_feedback'])) {
             <h1>About StockBuddy</h1>
         </div>
 
-        <!-- Display feedback success message here -->
+        
         <?php if (!empty($feedback_message)): ?>
             <p class="feedback-success"><i class="fa-solid fa-check-circle"></i> <?php echo $feedback_message; ?></p>
         <?php endif; ?>
