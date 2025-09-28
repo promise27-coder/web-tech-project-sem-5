@@ -25,12 +25,12 @@ if (!isset($_SESSION['user'])) {
             margin: 0;
         }
 
-        /* <<< NAV CSS SUDHARI NAKHYO CHHE >>> */
+        /* --- NAV CSS UPDATED FOR NEW LAYOUT --- */
         nav {
             background: #00796b;
             padding: 10px 40px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -41,13 +41,16 @@ if (!isset($_SESSION['user'])) {
             font-weight: 700;
             color: white;
             text-decoration: none;
-            position: absolute;
-            left: 40px;
         }
 
+        /* Centered Navigation Links */
         .nav-links {
             display: flex;
-            align-items: center;
+            justify-content: center;
+            /* Absolute positioning for perfect centering */
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .nav-links a {
@@ -64,11 +67,11 @@ if (!isset($_SESSION['user'])) {
             background: #004d40;
         }
 
+        /* Right side icons container */
         .nav-right {
             display: flex;
             align-items: center;
-            position: absolute;
-            right: 40px;
+            gap: 25px; /* Space between icons */
         }
 
         .logout-icon {
@@ -80,6 +83,48 @@ if (!isset($_SESSION['user'])) {
 
         .logout-icon:hover {
             transform: scale(1.1);
+        }
+
+        .menu-toggle {
+            display: none; /* Hidden on Desktop */
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        /* --- MEDIA QUERY FOR RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide centered links on mobile view */
+                flex-direction: column;
+                position: absolute;
+                top: 100%; /* Position dropdown below nav */
+                left: 0;
+                width: 100%;
+                background-color: #00796b;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transform: none; /* Reset transform for dropdown */
+                z-index: 100;
+            }
+
+            .nav-links.active {
+                display: flex; /* Show dropdown when active */
+            }
+
+            .nav-links a {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 15px 40px;
+                text-align: center;
+                margin: 0;
+                border-top: 1px solid #006054;
+            }
+
+            .menu-toggle {
+                display: block; /* Show hamburger icon */
+            }
         }
 
         h1 {
@@ -97,77 +142,37 @@ if (!isset($_SESSION['user'])) {
             overflow-x: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 18px 22px;
-            text-align: left;
-            border-bottom: 1px solid #eef2f7;
-        }
-
-        th {
-            background: #00796b;
-            color: white;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        tbody tr {
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        tbody tr:hover {
-            background-color: #f1f8f5;
-        }
-
-        .positive {
-            color: #2e7d32;
-            font-weight: bold;
-        }
-
-        .negative {
-            color: #c62828;
-            font-weight: bold;
-        }
-
-        .neutral {
-            color: #757575;
-            font-weight: bold;
-        }
-
-        canvas.sparkline {
-            width: 100px !important;
-            height: 30px !important;
-        }
-
-        .footer-note {
-            text-align: center;
-            font-style: italic;
-            margin: 20px;
-            font-size: 0.8rem;
-            color: #666;
-        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 18px 22px; text-align: left; border-bottom: 1px solid #eef2f7; }
+        th { background: #00796b; color: white; font-size: 0.9rem; text-transform: uppercase; }
+        tbody tr { cursor: pointer; transition: background-color 0.2s ease-in-out; }
+        tbody tr:hover { background-color: #f1f8f5; }
+        .positive { color: #2e7d32; font-weight: bold; }
+        .negative { color: #c62828; font-weight: bold; }
+        .neutral { color: #757575; font-weight: bold; }
+        canvas.sparkline { width: 100px !important; height: 30px !important; }
+        .footer-note { text-align: center; font-style: italic; margin: 20px; font-size: 0.8rem; color: #666; }
     </style>
 </head>
 
 <body>
     <nav>
-        <a href="home.php" class="logo">StockBuddy</a>
-        <div class="nav-links">
+        <a href="home.php" class="logo"><i class="fa-solid fa-chart-pie"></i> StockBuddy</a>
+        
+        <div class="nav-links" id="nav-links">
             <a href="home.php">Home</a>
             <a href="sharelist.php">Share List</a>
             <a href="portfolio.php">Portfolio</a>
             <a href="about.php">About Us</a>
         </div>
-        <div class="nav-right">
-            <a href="logout.php" class="logout-icon" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
-        </div>
+<div class="nav-right">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <a href="logout.php" class="logout-icon" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+</div>
     </nav>
+    
     <h1>Live Stock Prices</h1>
     <div class="table-container">
         <table>
@@ -207,59 +212,58 @@ if (!isset($_SESSION['user'])) {
         </table>
     </div>
     <p class="footer-note">*All prices are for demonstration purposes only. Click on any stock for more details.</p>
+    
     <script>
+        // --- SCRIPT FOR RESPONSIVE HAMBURGER MENU ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+
+        // --- EXISTING SCRIPT FOR STOCKS ---
         let charts = {};
         const dataPointLimit = 20;
 
         function createChart(id, basePrice) {
             const ctx = document.getElementById("chart-" + id).getContext("2d");
-            const chartInstance = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: Array(dataPointLimit).fill(''),
-                    datasets: [{
-                        data: [basePrice],
-                        borderColor: "#757575",
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: { x: { display: false }, y: { display: false } }
-                }
+            charts[id] = new Chart(ctx, {
+                type: "line", data: { labels: Array(dataPointLimit).fill(''), datasets: [{ data: [basePrice], borderColor: "#757575", borderWidth: 2, pointRadius: 0, tension: 0.4 }] },
+                options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
             });
-            charts[id] = chartInstance;
         }
 
         function updateStock(id, basePrice) {
             const priceEl = document.getElementById("price-" + id);
             const changeEl = document.getElementById("change-" + id);
+            if (!priceEl || !changeEl || !charts[id]) return;
+            
             const chart = charts[id];
             const oldPrice = parseFloat(priceEl.innerText);
             const newPrice = oldPrice + (Math.random() * (oldPrice * 0.01) - (oldPrice * 0.005));
             const change = ((newPrice - basePrice) / basePrice) * 100;
+            
             priceEl.innerText = newPrice.toFixed(2);
             let changeClass = "neutral", changeText = change.toFixed(2) + "%", borderColor = "#757575";
-            if (change > 0) {
-                changeClass = "positive"; changeText = "+" + change.toFixed(2) + "%"; borderColor = "#2e7d32";
-            } else if (change < 0) {
-                changeClass = "negative"; borderColor = "#c62828";
-            }
+            if (change > 0) { changeClass = "positive"; changeText = "+" + change.toFixed(2) + "%"; borderColor = "#2e7d32"; } 
+            else if (change < 0) { changeClass = "negative"; borderColor = "#c62828"; }
+            
             changeEl.innerText = changeText;
             changeEl.className = changeClass;
+            
             const chartData = chart.data.datasets[0].data;
-            const chartLabels = chart.data.labels;
             chartData.push(newPrice);
-            chartLabels.push('');
-            if (chartData.length > dataPointLimit) {
-                chartData.shift();
-                chartLabels.shift();
-            }
+            if (chartData.length > dataPointLimit) chartData.shift();
+            
             chart.data.datasets[0].borderColor = borderColor;
             chart.update('none');
         }
+        
         <?php
         foreach ($stocks_data_for_js as $stock) {
             $symbol_lower = strtolower($stock["symbol"]);

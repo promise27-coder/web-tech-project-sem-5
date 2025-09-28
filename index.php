@@ -200,7 +200,7 @@
             <div class="hero-content" data-aos="fade-up">
                 <h1>Track the Market, <span>Seize the Opportunity.</span></h1>
                 <p>StockBuddy offers a clean, simple, and powerful interface to monitor real-time stock prices and trends effortlessly. Your journey to smart investing starts here.</p>
-                <a href="register.php" class="cta-button">Get Started for Free</a>
+                <a href="login.php" class="cta-button">Get Started for Free</a>
             </div>
         </section>
     </div>
@@ -237,7 +237,7 @@
     </section>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> StockBuddy. All Rights Reserved.</p>
+        <p>&copy; <?php echo date("Y"); ?> StockBuddy. All Rights Reserved. Devloped By 𖹭 PROMIS VORA 𖹭 </p>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

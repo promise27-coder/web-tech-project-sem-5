@@ -68,13 +68,12 @@ if (isset($_POST['submit_feedback'])) {
             margin: 0;
             color: var(--text-color);
         }
-
-        /* <<< NAV CSS SUDHARI NAKHYO CHHE >>> */
+        
         nav {
             background: var(--primary-color);
             padding: 10px 40px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -85,14 +84,16 @@ if (isset($_POST['submit_feedback'])) {
             font-weight: 700;
             color: white;
             text-decoration: none;
-            position: absolute;
-            left: 40px;
         }
-
         .nav-links {
             display: flex;
-            align-items: center;
+            justify-content: center;
+            /* Absolute positioning for perfect centering */
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
+
 
         .nav-links a {
             color: white;
@@ -111,8 +112,7 @@ if (isset($_POST['submit_feedback'])) {
         .nav-right {
             display: flex;
             align-items: center;
-            position: absolute;
-            right: 40px;
+            gap: 20px;
         }
 
         .logout-icon {
@@ -124,6 +124,13 @@ if (isset($_POST['submit_feedback'])) {
 
         .logout-icon:hover {
             transform: scale(1.1);
+        }
+
+        .hamburger-icon {
+            display: none;
+            font-size: 1.6rem;
+            color: white;
+            cursor: pointer;
         }
 
         .content-container {
@@ -254,10 +261,48 @@ if (isset($_POST['submit_feedback'])) {
         .feedback-form button:hover {
             background: var(--secondary-color);
         }
-
+        
         @media(max-width: 768px) {
             .info-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 625px) {
+            nav {
+                padding: 10px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px; /* Navbar ni height jetli jagya */
+                /* <<< AA LINES MA SUDHARO KARYO CHHE >>> */
+                left: 0; /* right ne badle left */
+                width: 100%; /* fixed width ne badle full width */
+                border-radius: 0; /* Corner radius kadhi nakhyo */
+                /* ------------------------------------ */
+                background-color: var(--secondary-color);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                padding-top: 10px;
+                padding-bottom: 10px;
+                z-index: 10;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 15px 20px; /* Thodi vadhare jagya aapi */
+                margin: 0;
+            }
+            
+            .hamburger-icon {
+                display: block;
             }
         }
     </style>
@@ -265,17 +310,23 @@ if (isset($_POST['submit_feedback'])) {
 
 <body>
     <nav>
-        <a href="home.php" class="logo">StockBuddy</a>
-        <div class="nav-links">
+        <a href="home.php" class="logo"><i class="fa-solid fa-chart-pie"></i> StockBuddy</a>
+        
+        <div class="nav-links" id="nav-links">
             <a href="home.php">Home</a>
             <a href="sharelist.php">Share List</a>
             <a href="portfolio.php">Portfolio</a>
             <a href="about.php">About Us</a>
         </div>
+        
         <div class="nav-right">
+            <div class="hamburger-icon" id="hamburger-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
             <a href="logout.php" class="logout-icon" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </nav>
+
     <div class="content-container">
         <div class="hero">
             <h1>About StockBuddy</h1>
@@ -306,7 +357,7 @@ if (isset($_POST['submit_feedback'])) {
                 <div class="contact-details">
                     <div class="contact-link"><i class="fa-solid fa-envelope-open-text"></i><a
                             href="mailto:stockbuddy@example.com">stockbuddy@gmail.com</a></div>
-                    <p><b>CO. NO.:</b><br></p>
+                    <p><b>CONTACT NO.:</b><br><br></p>
                     <div class="contact-link"><i class="fa-solid fa-phone-volume"></i><a href="tel:+919876543210">+91
                             9876543210</a></div>
                 </div>
@@ -322,6 +373,16 @@ if (isset($_POST['submit_feedback'])) {
             </div>
         </div>
     </div>
-</body>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger-icon');
+            const navLinks = document.getElementById('nav-links');
 
+            hamburger.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
 </html>

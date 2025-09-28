@@ -68,13 +68,12 @@ $overall_pnl = $current_total_value - $total_investment;
             background: #f0f2f5;
             margin: 0;
         }
-
-        /* <<< NAV CSS SUDHARI NAKHYO CHHE >>> */
+        
         nav {
             background: var(--primary-color);
             padding: 10px 40px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -85,13 +84,13 @@ $overall_pnl = $current_total_value - $total_investment;
             font-weight: 700;
             color: white;
             text-decoration: none;
-            position: absolute;
-            left: 40px;
         }
-
+        
         .nav-links {
             display: flex;
-            align-items: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .nav-links a {
@@ -103,7 +102,7 @@ $overall_pnl = $current_total_value - $total_investment;
             border-radius: 4px;
             transition: background 0.3s;
         }
-
+        
         .nav-links a:hover {
             background: var(--secondary-color);
         }
@@ -111,9 +110,7 @@ $overall_pnl = $current_total_value - $total_investment;
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 2px;
-            position: absolute;
-            right: 40px;
+            gap: 20px;
         }
 
         .logout-icon {
@@ -129,6 +126,40 @@ $overall_pnl = $current_total_value - $total_investment;
 
         .hamburger-btn {
             display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-color);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                transform: none; 
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px;
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid var(--secondary-color);
+            }
+
+            .hamburger-btn {
+                display: block;
+            }
         }
 
         .container {
@@ -298,17 +329,23 @@ $overall_pnl = $current_total_value - $total_investment;
 <body>
     <div id="toast-container"></div>
     <nav>
-        <a href="home.php" class="logo">StockBuddy</a>
-        <div class="nav-links">
+        <a href="home.php" class="logo"><i class="fa-solid fa-chart-pie"></i> StockBuddy</a>
+        
+        <div class="nav-links" id="nav-links-container">
             <a href="home.php">Home</a>
             <a href="sharelist.php">Share List</a>
             <a href="portfolio.php">Portfolio</a>
             <a href="about.php">About Us</a>
         </div>
+        
         <div class="nav-right">
+             <button class="hamburger-btn" id="hamburger-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <a href="logout.php" class="logout-icon" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </nav>
+
     <div class="container">
         <h1>My Portfolio</h1>
         <div class="portfolio-summary">
@@ -484,6 +521,15 @@ $overall_pnl = $current_total_value - $total_investment;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const navLinks = document.getElementById('nav-links-container');
+
+            hamburgerBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        });
     </script>
 </body>
 
