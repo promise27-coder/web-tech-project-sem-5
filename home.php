@@ -36,13 +36,11 @@ if (!isset($_SESSION['user'])) {
             overflow-x: hidden;
         }
 
-        /* <<< NAV CSS MA SUDHARO KARYO CHHE >>> */
         nav {
             background: var(--primary-color);
             padding: 10px 40px;
             display: flex;
             justify-content: center;
-            /* Links ne center ma lavva mate */
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -54,7 +52,6 @@ if (!isset($_SESSION['user'])) {
             color: white;
             text-decoration: none;
             position: absolute;
-            /* Logo ne left ma set karva */
             left: 40px;
         }
 
@@ -76,7 +73,7 @@ if (!isset($_SESSION['user'])) {
 
         .nav-links a:hover {
             background: var(--secondary-color);
-            transform: scale(1.2) rotate(360deg); 
+            transform: scale(1.2) rotate(360deg);
         }
 
         .nav-right {
@@ -84,7 +81,6 @@ if (!isset($_SESSION['user'])) {
             align-items: center;
             gap: 25px;
             position: absolute;
-            /* Nav-right ne right ma set karva */
             right: 40px;
         }
 
@@ -96,7 +92,7 @@ if (!isset($_SESSION['user'])) {
         }
 
         .logout-icon:hover {
-            transform: scale(1.2) rotate(360deg); 
+            transform: scale(1.2) rotate(360deg);
         }
 
         .hamburger-btn {
@@ -108,7 +104,6 @@ if (!isset($_SESSION['user'])) {
             cursor: pointer;
         }
 
-        /* RESPONSIVE CODE */
         @media (max-width: 768px) {
             nav {
                 justify-content: space-between;
@@ -311,7 +306,7 @@ if (!isset($_SESSION['user'])) {
 </head>
 
 <body>
-            
+
     <nav>
         <a href="home.php" class="logo"><i class="fa-solid fa-chart-pie"></i> StockBuddy</a>
         <div class="nav-links" id="nav-links">

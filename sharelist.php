@@ -25,7 +25,7 @@ if (!isset($_SESSION['user'])) {
             margin: 0;
         }
 
-        /* --- NAV CSS UPDATED FOR NEW LAYOUT --- */
+      
         nav {
             background: #00796b;
             padding: 10px 40px;
@@ -43,11 +43,11 @@ if (!isset($_SESSION['user'])) {
             text-decoration: none;
         }
 
-        /* Centered Navigation Links */
+    
         .nav-links {
             display: flex;
             justify-content: center;
-            /* Absolute positioning for perfect centering */
+          
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -67,11 +67,11 @@ if (!isset($_SESSION['user'])) {
             background: #004d40;
         }
 
-        /* Right side icons container */
+       
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 25px; /* Space between icons */
+            gap: 25px; 
         }
 
         .logout-icon {
@@ -86,7 +86,7 @@ if (!isset($_SESSION['user'])) {
         }
 
         .menu-toggle {
-            display: none; /* Hidden on Desktop */
+            display: none; 
             background: none;
             border: none;
             color: white;
@@ -94,23 +94,23 @@ if (!isset($_SESSION['user'])) {
             cursor: pointer;
         }
 
-        /* --- MEDIA QUERY FOR RESPONSIVENESS --- */
+     
         @media (max-width: 768px) {
             .nav-links {
-                display: none; /* Hide centered links on mobile view */
+                display: none; 
                 flex-direction: column;
                 position: absolute;
-                top: 100%; /* Position dropdown below nav */
+                top: 100%; 
                 left: 0;
                 width: 100%;
                 background-color: #00796b;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                transform: none; /* Reset transform for dropdown */
+                transform: none; 
                 z-index: 100;
             }
 
             .nav-links.active {
-                display: flex; /* Show dropdown when active */
+                display: flex;
             }
 
             .nav-links a {
@@ -123,7 +123,7 @@ if (!isset($_SESSION['user'])) {
             }
 
             .menu-toggle {
-                display: block; /* Show hamburger icon */
+                display: block; 
             }
         }
 
@@ -214,7 +214,7 @@ if (!isset($_SESSION['user'])) {
     <p class="footer-note">*All prices are for demonstration purposes only. Click on any stock for more details.</p>
     
     <script>
-        // --- SCRIPT FOR RESPONSIVE HAMBURGER MENU ---
+
         document.addEventListener('DOMContentLoaded', function() {
             const menuToggle = document.getElementById('menu-toggle');
             const navLinks = document.getElementById('nav-links');
@@ -226,7 +226,7 @@ if (!isset($_SESSION['user'])) {
             }
         });
 
-        // --- EXISTING SCRIPT FOR STOCKS ---
+
         let charts = {};
         const dataPointLimit = 20;
 

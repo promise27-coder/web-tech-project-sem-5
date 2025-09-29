@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// --- SECURITY CHECK ---
 if (!isset($_SESSION['user']) || $_SESSION['user'] !== 'admin') {
     header("Location: login.php");
     exit();
 }
 
-// --- DATABASE CONNECTION ---
 $conn = new mysqli("localhost", "root", "", "stockbuddy_db");
 if ($conn->connect_error) {
     if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -17,14 +15,12 @@ if ($conn->connect_error) {
     die("DB connection error: " . $conn->connect_error);
 }
 
-// --- API FOR AJAX REQUESTS ---
 if (isset($_GET['action'])) {
     header('Content-Type: application/json');
     $action = $_GET['action'];
     $response = ['status' => 'error', 'message' => 'An unknown error occurred.'];
 
     try {
-        // USER ACTIONS
         if ($action === 'add_user') {
             $user = trim($_POST['username']);
             $pass = trim($_POST['password']);
@@ -74,7 +70,6 @@ if (isset($_GET['action'])) {
             $stmt->close();
             $response = ['status' => 'success', 'message' => 'User deleted successfully.'];
         }
-        // STOCK ACTIONS
         elseif ($action === 'add_stock') {
             $name = trim($_POST['stock_name']);
             $symbol = strtoupper(trim($_POST['symbol']));
@@ -93,16 +88,13 @@ if (isset($_GET['action'])) {
             $stmt->close();
             $response = ['status' => 'success', 'message' => "Stock '$name' added successfully!"];
         } elseif ($action === 'update_stock') {
-            // --- CHANGE 3: REMOVED PRICE FROM BACKEND UPDATE LOGIC ---
             $id = $_POST['id'];
             $name = trim($_POST['stock_name']);
             $symbol = strtoupper(trim($_POST['symbol']));
             if (empty($name) || empty($symbol))
                 throw new Exception("Stock name and symbol are required.");
 
-            // Query no longer includes base_price
             $stmt = $conn->prepare("UPDATE stocks SET stock_name=?, symbol=? WHERE id=?");
-            // Bind params updated to "ssi"
             $stmt->bind_param("ssi", $name, $symbol, $id);
             $stmt->execute();
             $stmt->close();
@@ -134,7 +126,6 @@ if (isset($_GET['action'])) {
     exit();
 }
 
-// --- DATA FOR PAGE LOAD ---
 $user_count = $conn->query("SELECT COUNT(id) as count FROM users")->fetch_assoc()['count'];
 $stock_count = $conn->query("SELECT COUNT(id) as count FROM stocks")->fetch_assoc()['count'];
 $feedback_count = $conn->query("SELECT COUNT(id) as count FROM feedback")->fetch_assoc()['count'];
@@ -175,7 +166,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
             scroll-behavior: smooth;
         }
 
-        /* Added scroll-behavior */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
@@ -232,7 +222,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
             margin-bottom: 30px;
         }
 
-        /* --- CHANGE 1: CSS FOR CLICKABLE STAT CARD --- */
         a.stat-card-link {
             text-decoration: none;
             color: inherit;
@@ -502,7 +491,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
             font-size: 1.2rem;
         }
 
-        /* --- CHANGE 2: CSS FOR BACK TO TOP BUTTON --- */
         #back-to-top-btn {
             display: none;
             position: fixed;
@@ -778,7 +766,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                 window.onclick = event => { if (event.target == modal) { modal.style.display = 'none'; } };
             });
 
-            // --- User Management ---
             const userModal = document.getElementById('user-modal');
             const userForm = document.getElementById('user-form');
             document.getElementById('add-user-btn').addEventListener('click', () => {
@@ -806,7 +793,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                 });
             });
 
-            // --- Stock Management ---
             const stockModal = document.getElementById('stock-modal');
             const stockForm = document.getElementById('stock-form');
             const addStockPriceGroup = document.getElementById('add-stock-price-group');
@@ -815,7 +801,7 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                 stockForm.reset();
                 document.getElementById('stock-id').value = '';
                 document.getElementById('stock-modal-title').innerText = 'Add New Stock';
-                addStockPriceGroup.style.display = 'block'; // Show price for new stocks
+                addStockPriceGroup.style.display = 'block';
                 document.getElementById('base_price').setAttribute('required', 'required');
                 stockModal.style.display = 'block';
             });
@@ -825,7 +811,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                     document.getElementById('stock-id').value = row.dataset.stockId;
                     document.getElementById('stock_name').value = row.dataset.name;
                     document.getElementById('symbol').value = row.dataset.symbol;
-                    // --- CHANGE 3: HIDE PRICE FIELD ON EDIT ---
                     addStockPriceGroup.style.display = 'none';
                     document.getElementById('base_price').removeAttribute('required');
 
@@ -846,7 +831,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                 });
             });
 
-            // --- Feedback Management ---
             const feedbackModal = document.getElementById('feedback-view-modal');
             document.querySelectorAll('.view-feedback-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -866,7 +850,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                 });
             });
 
-            // --- Search Functionality ---
             const setupSearch = (inputId, tableId) => {
                 document.getElementById(inputId).addEventListener('keyup', function () {
                     const filter = this.value.toUpperCase();
@@ -881,7 +864,6 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
             setupSearch('stock-search', 'stock-table');
             setupSearch('feedback-search', 'feedback-table');
 
-            // --- CHANGE 2: JAVASCRIPT FOR BACK TO TOP BUTTON ---
             const backToTopBtn = document.getElementById('back-to-top-btn');
             window.onscroll = function () {
                 if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -891,8 +873,8 @@ $feedbacks = $conn->query("SELECT * FROM feedback ORDER BY submission_date DESC"
                 }
             };
             backToTopBtn.addEventListener('click', function () {
-                document.body.scrollTop = 0; // For Safari
-                document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
             });
 
         });

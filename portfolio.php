@@ -6,14 +6,24 @@ if (!isset($_SESSION['user'])) {
 }
 include 'db_connect.php';
 
-// Get user ID
+// 1. Get user ID safely
+$user_id = null;
 $user_stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
 $user_stmt->bind_param("s", $_SESSION['user']);
 $user_stmt->execute();
-$user_id = $user_stmt->get_result()->fetch_assoc()['id'];
+$user_result = $user_stmt->get_result();
+if ($user_row = $user_result->fetch_assoc()) {
+    $user_id = $user_row['id'];
+}
 $user_stmt->close();
 
-// Fetch portfolio data
+// If for some reason user is not found, exit gracefully
+if ($user_id === null) {
+    die("Error: Could not validate user session.");
+}
+
+// 2. Fetch portfolio data using a standard while loop
+$portfolio_data = []; // Use this array to store data
 $sql = "SELECT p.stock_symbol, p.quantity, p.purchase_price, s.stock_name, s.base_price 
         FROM portfolio p 
         JOIN stocks s ON p.stock_symbol = s.symbol 
@@ -21,13 +31,19 @@ $sql = "SELECT p.stock_symbol, p.quantity, p.purchase_price, s.stock_name, s.bas
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$portfolio_result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $portfolio_data[] = $row;
+}
+$stmt->close();
 
+
+// 3. Perform calculations on the fetched data
 $total_investment = 0;
 $current_total_value = 0;
 $portfolio_for_js = [];
 
-foreach ($portfolio_result as $row) {
+foreach ($portfolio_data as $row) {
     $investment = $row['quantity'] * $row['purchase_price'];
     $current_value = $row['quantity'] * $row['base_price'];
     $total_investment += $investment;
@@ -365,7 +381,7 @@ $overall_pnl = $current_total_value - $total_investment;
             </div>
         </div>
         <div class="table-container">
-            <?php if (count($portfolio_result) > 0): ?>
+            <?php if (count($portfolio_data) > 0): ?>
                 <table>
                     <thead>
                         <tr>
@@ -379,7 +395,7 @@ $overall_pnl = $current_total_value - $total_investment;
                         </tr>
                     </thead>
                     <tbody id="portfolio-body">
-                        <?php foreach ($portfolio_result as $row):
+                        <?php foreach ($portfolio_data as $row):
                             $investment = $row['quantity'] * $row['purchase_price'];
                             $current_value = $row['quantity'] * $row['base_price'];
                             $pnl = $current_value - $investment;
