@@ -8,23 +8,23 @@ if (!isset($_SESSION['user'])) {
 $feedback_message = '';
 $message_class = '';
 
-// Check if the feedback form is submitted
+
 if (isset($_POST['submit_feedback'])) {
-    // Include the database connection file
+
     include 'db_connect.php';
 
-    // Get form data and sanitize it
+
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $message = trim($_POST['message']);
 
-    // Server-side validation
+
     if (!empty($name) && !empty($email) && !empty($message)) {
-        // Prepare an insert statement to prevent SQL injection
+
         $stmt = $conn->prepare("INSERT INTO feedback (name, email, message) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $name, $email, $message);
 
-        // Execute the statement and check for success
+
         if ($stmt->execute()) {
             $feedback_message = "Thank you for your feedback, " . htmlspecialchars($name) . "!";
             $message_class = 'feedback-success';
@@ -88,7 +88,7 @@ if (isset($_POST['submit_feedback'])) {
         .nav-links {
             display: flex;
             justify-content: center;
-            /* Absolute positioning for perfect centering */
+
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -128,8 +128,10 @@ if (isset($_POST['submit_feedback'])) {
 
         .hamburger-icon {
             display: none;
-            font-size: 1.6rem;
+            background: none;
+            border: none;
             color: white;
+            font-size: 1.8rem;
             cursor: pointer;
         }
 
@@ -277,12 +279,10 @@ if (isset($_POST['submit_feedback'])) {
                 display: none;
                 flex-direction: column;
                 position: absolute;
-                top: 60px; /* Navbar ni height jetli jagya */
-                /* <<< AA LINES MA SUDHARO KARYO CHHE >>> */
-                left: 0; /* right ne badle left */
-                width: 100%; /* fixed width ne badle full width */
-                border-radius: 0; /* Corner radius kadhi nakhyo */
-                /* ------------------------------------ */
+                top: 60px; 
+                left: 0; 
+                width: 100%; 
+                border-radius: 0; 
                 background-color: var(--secondary-color);
                 box-shadow: 0 4px 8px rgba(0,0,0,0.2);
                 padding-top: 10px;
@@ -297,7 +297,7 @@ if (isset($_POST['submit_feedback'])) {
             .nav-links a {
                 width: 100%;
                 text-align: center;
-                padding: 15px 20px; /* Thodi vadhare jagya aapi */
+                padding: 15px 20px;
                 margin: 0;
             }
             
@@ -348,7 +348,7 @@ if (isset($_POST['submit_feedback'])) {
             </div>
             <div class="info-section">
                 <h2><i class="fa-solid fa-code"></i> Technology Stack</h2>
-                <p>HTML, CSS, <br> JavaScript, PHP</p>
+                <p>HTML, CSS, JavaScript, <br> PHP, MySql</p>
             </div>
             <div class="info-section" id="contact-info">
                 <h2><i class="fa-solid fa-comments"></i> Contact Us</h2>

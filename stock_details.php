@@ -13,7 +13,6 @@ if (!isset($_GET['symbol'])) {
 include 'db_connect.php';
 $symbol = $_GET['symbol'];
 
-// <<< AA CODE MISSING HATO, HAVE ADD KARI DIDHO CHHE >>>
 // Fetch stock details from DB
 $stmt = $conn->prepare("SELECT stock_name, symbol, base_price FROM stocks WHERE symbol = ?");
 $stmt->bind_param("s", $symbol);
@@ -27,7 +26,6 @@ if ($result->num_rows === 0) {
 $stock = $result->fetch_assoc();
 $stmt->close();
 $conn->close();
-// <<< AHIN SUDHI NO CODE MISSING HATO >>>
 
 
 // --- DEMO DATA GENERATION FOR MULTIPLE TIMEFRAMES ---
@@ -67,10 +65,10 @@ $pe_ratio = rand(1500, 8000) / 100;
     <title><?php echo htmlspecialchars($stock['stock_name']); ?> Details - StockBuddy</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
         :root {
             --primary-color: #00796b;
@@ -87,47 +85,101 @@ $pe_ratio = rand(1500, 8000) / 100;
             margin: 0;
             color: #333;
         }
-
+        
+        /* --- NAVIGATION BAR CSS UPDATED --- */
         nav {
             background: var(--primary-color);
-            padding: 13px 15px;
+            padding: 10px 40px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
-        nav a {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
             color: white;
-            margin: 5px 15px;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a {
+            color: white;
+            margin: 0 15px;
             text-decoration: none;
             font-weight: 600;
             padding: 5px 10px;
             border-radius: 4px;
             transition: background 0.3s;
         }
-
-        nav a:hover {
+        
+        .nav-links a:hover {
             background: var(--secondary-color);
         }
 
-        nav {
-            position: relative;
-            justify-content: center;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .logout-icon {
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
+            color: white;
             font-size: 1.6rem;
+            text-decoration: none;
             transition: transform 0.2s ease;
         }
 
         .logout-icon:hover {
-            transform: translateY(-50%) scale(1.1);
-            background: none;
+            transform: scale(1.1);
         }
+        
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-color);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                transform: none; 
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px;
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid var(--secondary-color);
+            }
+
+            .hamburger-btn {
+                display: block;
+            }
+        }
+        /* --- END OF NAV BAR CSS --- */
 
         .container {
             max-width: 1200px;
@@ -349,11 +401,21 @@ $pe_ratio = rand(1500, 8000) / 100;
 <body>
     <div id="toast-container"></div>
     <nav>
-        <a href="home.php">Home</a>
-        <a href="sharelist.php">Share List</a>
-        <a href="portfolio.php">Portfolio</a>
-        <a href="about.php">About Us</a>
-        <a href="logout.php" class="logout-icon" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+        <a href="home.php" class="logo"><i class="fa-solid fa-chart-pie"></i> StockBuddy</a>
+        
+        <div class="nav-links" id="nav-links-container">
+            <a href="home.php">Home</a>
+            <a href="sharelist.php">Share List</a>
+            <a href="portfolio.php">Portfolio</a>
+            <a href="about.php">About Us</a>
+        </div>
+        
+        <div class="nav-right">
+             <button class="hamburger-btn" id="hamburger-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <a href="logout.php" class="logout-icon" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
     </nav>
 
     <div class="container">
@@ -544,6 +606,16 @@ $pe_ratio = rand(1500, 8000) / 100;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+        
+        // --- SCRIPT FOR HAMBURGER MENU (ADDED) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const navLinks = document.getElementById('nav-links-container');
+
+            hamburgerBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        });
     </script>
 </body>
 

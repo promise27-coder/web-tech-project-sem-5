@@ -135,7 +135,6 @@
             margin: 0 auto;
         }
         
-        /* <<< AA NAVO CSS CODE ADD KARYO CHHE >>> */
         .feature-link {
             text-decoration: none;
             color: inherit;
@@ -149,7 +148,7 @@
             width: 300px;
             border: 1px solid #333;
             transition: transform 0.3s, box-shadow 0.3s;
-            height: 100%; /* Added for equal height */
+            height: 100%;
         }
         .feature-card:hover {
             transform: translateY(-10px);
@@ -243,7 +242,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-            duration: 600, /* Animation speed thodi vadhari chhe */
+            duration: 600,
             once: true,
         });
     </script>

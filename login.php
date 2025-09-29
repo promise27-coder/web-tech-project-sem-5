@@ -3,7 +3,7 @@ session_start();
 $error = '';
 
 if (isset($_SESSION['user'])) {
-    // If already logged in, redirect based on username
+ 
     if ($_SESSION['user'] === 'admin') {
         header("Location: admin.php");
     } else {
@@ -27,20 +27,20 @@ if (isset($_POST['login'])) {
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
         
-        // Verify password
+
         if (password_verify($password, $user['password'])) {
-            // Set the session
+
             $_SESSION['user'] = $user['username'];
 
-            // Check if the logged-in user is 'admin'
+
             if ($user['username'] === 'admin') {
-                // Redirect to admin panel
+
                 header("Location: admin.php");
             } else {
-                // Redirect to normal user homepage
+
                 header("Location: home.php");
             }
-            exit(); // Always exit after a header redirect
+            exit(); 
 
         } else {
             $error = "Wrong username or password.";
@@ -136,7 +136,7 @@ if (isset($_POST['login'])) {
             z-index: 0;
         }
 
-        /* --- CSS SUDHARI CHHE --- */
+
         .stock-element {
             position: absolute;
             opacity: 0;
@@ -151,13 +151,13 @@ if (isset($_POST['login'])) {
             height: 50px;
             background-color: var(--up-color);
             border-radius: 2px;
-            position: relative; /* Wicks mate aa jaruri chhe */
+            position: relative;
         }
         .stock-element.candle.red {
             background-color: var(--down-color);
         }
         
-        /* Candle ni upar-niche ni lines (wicks) mate no code */
+   
         .stock-element.candle::before, .stock-element.candle::after {
             content: '';
             position: absolute;

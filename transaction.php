@@ -9,7 +9,7 @@ if (!isset($_SESSION['user'])) {
 
 include 'db_connect.php';
 
-// Get user ID from username
+
 $username = $_SESSION['user'];
 $user_stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
 $user_stmt->bind_param("s", $username);
@@ -35,7 +35,7 @@ if ($quantity_to_transact <= 0) {
 try {
     $conn->begin_transaction();
 
-    // Check current holdings
+
     $p_stmt = $conn->prepare("SELECT quantity, purchase_price FROM portfolio WHERE user_id = ? AND stock_symbol = ? FOR UPDATE");
     $p_stmt->bind_param("is", $user_id, $symbol);
     $p_stmt->execute();

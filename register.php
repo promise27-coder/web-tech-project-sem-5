@@ -1,5 +1,4 @@
 <?php
-// DB connection
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -11,7 +10,7 @@ if ($conn->connect_error) {
 }
 
 $message = "";
-$message_class = ""; // Not used in new design, but keeping logic
+$message_class = "";
 $redirect = false;
 
 if (isset($_POST['register'])) {
@@ -21,7 +20,6 @@ if (isset($_POST['register'])) {
     if (empty($newUser) || empty($plainPassword)) {
         $message = "Username and password cannot be empty.";
     } else {
-        // Step 1: Check if username already exists
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
         $stmt->bind_param("s", $newUser);
         $stmt->execute();
@@ -30,10 +28,8 @@ if (isset($_POST['register'])) {
         if ($stmt->num_rows > 0) {
             $message = "Username already taken!";
         } else {
-            // Step 2: Hash password
             $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
 
-            // Step 3: Insert into DB
             $stmt_insert = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
             $stmt_insert->bind_param("ss", $newUser, $hashedPassword);
 
@@ -140,7 +136,6 @@ $conn->close();
             z-index: 0;
         }
 
-        /* --- CSS SUDHARI CHHE --- */
         .stock-element {
             position: absolute;
             opacity: 0;
