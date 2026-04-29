@@ -1,0 +1,11 @@
+[build]
+  publish = "."
+
+# Netlify cannot execute PHP. Without these rules the browser downloads
+# every .php URL as a file because it has no recognized content type.
+# Send all .php requests to a friendly notice page instead.
+[[redirects]]
+  from = "/*.php"
+  to = "/unavailable.html"
+  status = 302
+  force = true
