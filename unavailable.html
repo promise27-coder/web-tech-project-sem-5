@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Unavailable - StockBuddy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00796b;
+            --secondary-color: #004d40;
+            --text-color: #f5f5f5;
+            --dark-bg: #121212;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+        .icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        p {
+            font-size: 1.05rem;
+            max-width: 620px;
+            margin: 0 auto 14px auto;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        .home-link {
+            background: var(--primary-color);
+            color: white;
+            padding: 14px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 24px;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .home-link:hover { background: var(--secondary-color); }
+        code {
+            background: #2a2a2a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #80cbc4;
+        }
+    </style>
+</head>
+<body>
+    <div class="icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h1>This feature is not available on the live site</h1>
+    <p>StockBuddy was built with PHP and MySQL. Login, registration, the portfolio dashboard, and admin features all run server-side on a PHP runtime with a local database.</p>
+    <p>This deployment is hosted on Netlify, which serves static files only and does not execute PHP or run MySQL. Only the landing page works here.</p>
+    <p>To use the full app, run it locally with XAMPP/MAMP, or deploy it to a PHP-capable host.</p>
+    <a href="/" class="home-link">Back to Home</a>
+</body>
+</html>

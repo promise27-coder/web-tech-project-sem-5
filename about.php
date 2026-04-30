@@ -352,7 +352,7 @@ if (isset($_POST['submit_feedback'])) {
             </div>
             <div class="info-section" id="contact-info">
                 <h2><i class="fa-solid fa-comments"></i> Contact Us</h2>
-                <p>Got a question or suggestion? <br> We'd love to hear from you.<br> Reach out to us..<br><b>Email</b>
+                <p>Got a question or suggestion? <br> We'd love to hear from you.<br> Reach out to us...<br><b>Email</b>
                 </p>
                 <div class="contact-details">
                     <div class="contact-link"><i class="fa-solid fa-envelope-open-text"></i><a
